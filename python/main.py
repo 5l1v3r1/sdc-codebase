@@ -17,7 +17,7 @@ def main():
     #fourcc = cv2.VideoWriter_fourcc(*'XVID')
     #out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480))
 
-    out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
+    out = cv2.VideoWriter('../data/output.avi', -1, 20.0, (640,480))
 
     # define mongodb database
 
@@ -26,7 +26,7 @@ def main():
 
     # main loop
 
-    while (cap.isOpened());
+    while (cap.isOpened()):
 	cmd1    = obd.commands.RPM
 	cmd2    = obd.commands.THROTTLE_POS
 	cmd3    = obd.comands.ENGINE_LOAD
@@ -37,13 +37,14 @@ def main():
 	response3 = connection.query(cmd3)
 	response4 = connection.query(cmd4)
 
-	result = db.restaurants.insert_one(
-            "drivingparams": {
-                "date": datetime.strptime("2014-10-01", "%Y-%m-%d"),
-                "RPM": str(response1),
-                "THROTTLE_POS": str(response2),
-                "ENGINE_LOAD": str(response3),
-                "SPEED": str(response4)
+	result = db.restaurants.insert_one({
+                "drivingparams": {
+                    "date": datetime.strptime("2014-10-01", "%Y-%m-%d"),
+                    "RPM": str(response1.value),
+                    "THROTTLE_POS": str(response2.value),
+                    "ENGINE_LOAD": str(response3.value),
+                    "SPEED": str(response4.value)
+                }
             }
 	)
 
@@ -61,9 +62,9 @@ def main():
 	else:
 	    break
 
-        cv2.imshow('frame', frame)
 
-	ts = time.time()
+
+        ts = time.time()
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 	print("Getting data for time " + st)
 
